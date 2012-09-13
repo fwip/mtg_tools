@@ -16,9 +16,11 @@ class Card
     \s* (--)? \s* # Separator before subtypes
     (?<subtypes> .*)?/x #Optional subtypes
 
-  @@cost_regex = /^[0-9WUGBR]+$/
+  @@cost_regex = /^[0-9WUGBRX]+$/
 
-  def initialize (text)
+  @@colors_of_magic = ['W', 'U', 'B', 'R', 'G']
+
+  def initialize (text = nil)
     if (text)
       self.load_from_text(text)
     end
@@ -84,8 +86,18 @@ class Card
     text << "#{@power}/#{@toughness}\n" unless @power.nil? and @toughness.nil?
     text << "#{@text}\n"
     text << "#{@expansion}-#{@rarity}\n"
+  end
 
+  def colors
+    @cost.split('') & @@colors_of_magic
+  end
 
+  def cmc
+    / X*         # Xs don't count towards converted mana cost
+      ([0-9]*)   # Digits
+      ([WUBRG]*) # Color symbols
+    /x .match @cost
+    $1.to_i + $2.length #Digits, read as a number, plus number of colored mana symbols
   end
 
 end
