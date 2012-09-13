@@ -9,6 +9,12 @@ class Card
   attr_accessor :rarity
 
 
+  def initialize (text)
+    if (text)
+      self.load_from_text(text)
+    end
+  end
+
   # Sample card definition follows:
   #
   #Goblin Piledriver
@@ -18,7 +24,7 @@ class Card
   #Protection from blue
   #Whenever Goblin Piledriver attacks, it gets +2/+0 until end of turn for each other attacking Goblin.
   #ONS-R
-  def load_from_text (text)
+  def load_from_text(text)
     lines = text.each_line.map { |l| l.chomp }
     @name = lines[0]
     @cost = lines[1]
@@ -30,7 +36,6 @@ class Card
       @text = lines[3..-2].join("\n")
     end
     (@expansion, @rarity) = lines[-1].split '-'
-
   end
 
   # Format, where <> denotes mandatory, and [] denotes optional.
