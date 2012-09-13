@@ -78,13 +78,13 @@ class Card
   # Same with text lines.
   def to_s
     text = "#{@name}\n"
-    text << "#{@cost}\n" unless @cost
+    text << "#{@cost}\n" unless @cost.empty?
     text << "#{@supertype} " if @supertype
     text << @type
-    text << " -- #{@subtypes.join(' ')}" if @subtypes.any?
+    text << " -- #{@subtypes.join(' ')}" if not @subtypes.nil? and @subtypes.any?
     text << "\n"
     text << "#{@power}/#{@toughness}\n" unless @power.nil? and @toughness.nil?
-    text << "#{@text}\n"
+    text << "#{@text}\n" unless @text.empty?
     text << "#{@expansion}-#{@rarity}\n"
   end
 
