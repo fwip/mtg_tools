@@ -2,10 +2,33 @@ class Deck
   attr_accessor :author
   attr_accessor :date
   attr_accessor :name
+  attr_accessor :cards
+  attr_accessor :sideboard
 
-  # Hashes: (key, value) -> (name, count)
-  @cards = nil
-  @sideboard = nil
+  # Returns a hash representing the changes needed to
+  # transform self into other
+  def diff (other)
+    diff = {}
+
+    other_cards = other.cards
+    @cards.each_pair do |k, v|
+      comp = other_cards[k]
+      if comp then
+        if comp != v then
+          diff[k] = comp.to_i - v.to_i
+        end
+      else
+        diff[k] = 0 - v.to_i
+      end
+    end
+    other_cards.each_pair do |k, v|
+      comp = @cards[k]
+      if comp.nil? then
+        diff[k] = v.to_i
+      end
+    end
+    diff
+  end
 
   def load_mtgo_format (text)
     @cards = {}
