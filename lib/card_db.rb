@@ -1,13 +1,32 @@
 class CardDB
+  require 'sqlite3'
   require_relative 'card'
   @path = nil
   @db = nil
 
   def initialize (path = 'data/card.db')
     @path = path
+    self.connect_to_db
   end
 
 
+  def get_card (name)
+    card = Card.new
+    card_retrieve_text = <<-SQL
+    SELECT name, cost, type, supertype, subtypes, power, toughness, text,
+      expansion, rarity
+    FROM cards
+    WHERE name = ?
+    SQL
+    info = @db.execute( card_retrieve_text, name )
+    (card.name, card.cost, card.type, card.supertype, card.subtypes,
+     card.power, card.toughness, card.text, card.expansion, card.rarity) = info.first
+
+    puts info.inspect
+    card.subtypes = eval card.subtypes # Wow awful
+    card
+
+  end
 
   def db_ready?
     table_exists = @db.execute <<-SQL
