@@ -1,4 +1,5 @@
 class CardDB
+  require_relative 'card'
   @path = nil
   @db = nil
 
@@ -27,7 +28,7 @@ class CardDB
       create table cards (
             name varchar(150) PRIMARY KEY,
             cost varchar(10),
-            type varchar(20),
+            type varchar(40),
             supertype varchar(20),
             subtypes varchar(40),
             power int,
@@ -50,18 +51,17 @@ class CardDB
   end
 
   def add_card (card)
-  # Card Insert Text
-  card_insert_text = <<-SQL
+    # Card Insert Text
+    card_insert_text = <<-SQL
       INSERT OR REPLACE INTO cards
       ( name, cost, type, supertype, subtypes,
       power, toughness, text, expansion, rarity )
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      SQL
-  @db.execute( card_insert_text,
-      card.name.to_s, card.cost.to_s, card.types.to_s, nil,
-      nil, card.power, card.toughness, card.text,
-      card.expansion, card.rarity
-   )
+    SQL
+    @db.execute(card_insert_text, card.name.to_s, card.cost.to_s,
+                card.type.to_s, card.supertype.to_s, card.subtypes.to_s, card.power,
+                card.toughness, card.text.to_s, card.expansion.to_s, card.rarity.to_s
+               )
   end
 
 end
