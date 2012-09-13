@@ -12,25 +12,27 @@ require_relative 'lib/card'
 # For testing purposes
 input_cards = ARGV
 
-unless input_files.any?
+unless input_cards.any?
   abort 'Usage: card_fetcher.rb "name1" ["name2" ...]'
 end
 
+testcard = "Goblin Piledriver
+1R
+Creature -- Goblin Warrior
+1/2
+Protection from blue
+Whenever Goblin Piledriver attacks, it gets +2/+0 until end of turn for each other attacking Goblin.
+ONS-R
+"
 
-for i in 'Goblin Piledriver' do
-#  doc = Nokogiri::HTML(open(i))
-#  decks = doc.css('div[class = "dekoptions"] > a')
-#  links = decks.map{ |d| d.attribute('href').to_s }
-#
-#  links.each do |link|
-#    deck = Deck.new
-#    link_name = link.sub( /\/magic\/(.*)\?.*/, '\1')
-#    link_path = link_prefix + link
-#    print "Downloading #{link}\n";
-#    deck.load_mtgo_format( open(link_path).read )
-#
-#    outfile = open( link_name, 'wb' )
-#    outfile.write( deck.to_s )
-#    outfile.close
-#  end
+print testcard + "\n"
+
+card = Card.new testcard
+
+print card
+
+if (card.to_s == testcard)
+  print "Hooray, they match!\n"
+else
+  abort "Oh no, they don't match. :(\n"
 end
